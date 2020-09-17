@@ -1,6 +1,9 @@
 import tensorflow as tf
 from tensorflow.examples.tutorials.mnist import input_data
 mnist = input_data.read_data_sets("MNIST_data/", one_hot=True) # y labels are oh-encoded
+import numpy as np
+from PIL import Image
+
 
 n_train = mnist.train.num_examples # 55,000
 n_validation = mnist.validation.num_examples # 5000
@@ -64,3 +67,7 @@ for i in range(n_iterations):
 test_accuracy = sess.run(accuracy, feed_dict={X: mnist.test.images, Y: mnist.test.labels, keep_prob:1.0})
 print("\nAccuracy on test set:", test_accuracy)
 
+img = np.invert(Image.open("ImageTest.png").convert('L')).ravel()
+
+prediction = sess.run(tf.argmax(output_layer,1), feed_dict={X: [img]})
+print ("Prediction for test image:", np.squeeze(prediction))
